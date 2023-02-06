@@ -11,7 +11,7 @@ We have two semesters to work on this project
 
 ### ----- Features -----
 
-	~~• Facial Recognition: If face is recognized as an owner, unlock door and say "Welcome {Owner}". Or allow an option to say "Unlock door" with speech recognition.~~
+	~~Facial Recognition: If face is recognized as an owner, unlock door and say "Welcome {Owner}". Or allow an option to say "Unlock door" with speech recognition.~~
 	• Biomatric Scanner: Replacing the facial recognition with a biometric finger scanner. This will allow the person to unlock the door if your finger has been verified.
 	
 	• Camera: Once motion is detected camera comes on and will either take a photo/video and will email that picture to the owner, as well as storing the picture/video into a database with the date and time of occurence.
