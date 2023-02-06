@@ -22,7 +22,6 @@ We have two semesters to work on this project
 	
 	• Door sensor magnets: to tell if door is closed or has been opened.
 
-	~~• Light/motion sensor: When motion is detected, camera and light come on (Light comes on regardless of night or day, but helps when ever it's night to be able to see faces better. Camera stays on for 10 seconds, but resets every time new motion is detected.~~
 
 	• Speaker: for text to speech
 	
