@@ -9,7 +9,7 @@
 
 We have two semesters to work on this project
 
-### ----- Features -----
+### ----- Features ----- 
 
 
 	• Biomatric Scanner: Replacing the facial recognition with a biometric finger scanner. This will allow the person to unlock the door if your finger has been verified.
