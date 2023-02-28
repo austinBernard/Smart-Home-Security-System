@@ -33,7 +33,8 @@ We have two semesters to work on this project
 
 If camera motion is detected, take a picture and email that picture to the owner/s. If door is forced entry, lock isn't unlocked by keypad or biometric scanner, set an actual alarm with the buzzer.
 
-![image](https://user-images.githubusercontent.com/109118567/218842965-f6c34735-0160-46ac-903e-2ce74db9378f.png)
+![image](https://user-images.githubusercontent.com/109118567/221726237-850d65f4-635d-4cc3-ade8-652a4201130c.png)
+
 
 
 
