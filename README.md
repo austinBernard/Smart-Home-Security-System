@@ -14,7 +14,7 @@ We have two semesters to work on this project
 
 	• Biomatric Scanner: Replacing the facial recognition with a biometric finger scanner. This will allow the person to unlock the door if your finger has been verified.
 	
-	• Camera: Once motion is detected camera comes on and will either take a photo/video and will email that picture to the owner, as well as storing the picture/video into a database with the date and time of occurence.
+	• Camera: Once motion is detected camera comes on and will either take a photo/video and will email that picture to the owner, as well as storing the picture/video into a database with the date and time of occurence. The camera will also act as a facial recognition to allow double verification along with the biometric scanner.
 	
 	• Door lock: If no finger is verified, be able to use a keypad to still allow entry through the lock.
 	
