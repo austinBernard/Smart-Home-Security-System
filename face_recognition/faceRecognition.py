@@ -53,7 +53,7 @@ class FaceRecognition:
         videoCapture = cv2.VideoCapture(0)
         
         verifiedFace = False
-        #lastMotionTime = time.time()
+        lastMotionTime = time.time()
         unknownFaceStored = False
         
         if not videoCapture.isOpened():
