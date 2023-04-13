@@ -53,7 +53,7 @@ class FaceRecognition:
         videoCapture = cv2.VideoCapture(0)
         
         verifiedFace = False
-        lastMotionTime = time.time()
+        #lastMotionTime = time.time()
         unknownFaceStored = False
         
         if not videoCapture.isOpened():
@@ -97,6 +97,7 @@ class FaceRecognition:
                     
                     # For the database to store the photo into.
                     if name == "Unknown" and not unknownFaceStored:
+                        lastMotionTime = time.time()
                         filename = os.path.join(folderName, f"{name}{count}.png")
                         
                         cv2.imwrite(filename, frame)
