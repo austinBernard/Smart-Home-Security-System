@@ -223,9 +223,9 @@ def get_num(max_number):
 led_color = 1
 led_mode = 4
 
+verifiedFace = False
 VerifiedPerson = False
 doorLocked = True
-
 
 ''' MAIN LOOP '''
 while True:
@@ -235,14 +235,24 @@ while True:
         print("Motion Detected")
 
         ''' Run through facial recognition class first. Once face is recognized, it will break out and move on to the fingerprint scanner loop '''
-        if not VerifiedPerson:
+        if not VerifiedPerson and not verifiedFace:
             fr = FaceRecognition()
-            fr.runRecognition()
+            status = fr.runRecognition()
+            # If face is verified move onto fingerprint sensor
+            if status == "Verified":
+                verifiedFace = True
+            # If face is not verified, go back to detecting motion
+            elif status == "NoMotionDetected":
+                verifiedFace = False
+            
         #VerifiedPerson = True
 
 
         '''Once face is recognized, break out of the first loop and go through the second loop to verify finger print'''
-        while VerifiedPerson == False:
+        tries = 3
+        while VerifiedPerson == False and verifiedFace == True:
+			startTime = time.time()
+            timeout = 10
             # Turn on LED for fingerprint sensor
             finger.set_led(color=3, mode=1)
             #print("----------------")
@@ -287,12 +297,19 @@ while True:
                 finger.set_led(color=led_color, mode=led_mode)
                 print("Detected #", finger.finger_id, "with confidence", finger.confidence)
                 VerifiedPerson = True
-
                 break
+                
+            # If finger not found in database, you have 3 tries to verify finger, or the loop will break
             else:
                 print("Finger not found")
+                tries -= 1
                 finger.set_led(color = 1, mode = 3)
                 time.sleep(1)
+                print(f"Tries remaining: {tries}")
+                if tries == 0:
+                    VerifiedPerson = False
+                    verifiedFace = False
+                    break
             '''elif c == "d":
                 if finger.delete_model(get_num(finger.library_size)) == adafruit_fingerprint.OK:
                     print("Deleted!")
@@ -342,6 +359,7 @@ while True:
         #engine.runAndWait()
         #engine.stop()
         VerifiedPerson = False
+        verifiedFace = False
         # Give the person enough time to get into the door before it goes through the magnetic contact switch loop
         time.sleep(5) # <-- Increase this time at the end of project to about 15-20 seconds
         

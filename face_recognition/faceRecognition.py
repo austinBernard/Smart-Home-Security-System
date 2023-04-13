@@ -124,11 +124,14 @@ class FaceRecognition:
 
             # If person is recognized, break out of while loop
             if verifiedFace == True:
-                print("face verified")
-                break
+                videoCapture.release()
+                cv2.destroyAllWindows()
+                return "Verified"
+
             elif time.time() - lastMotionTime > 15:
-                print("No motion detected")
-                break
+                videoCapture.release()
+                cv2.destroyAllWindows()
+                return "NoMotionDetected"
 
                     
                     
