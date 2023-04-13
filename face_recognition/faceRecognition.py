@@ -105,18 +105,12 @@ class FaceRecognition:
                         if count == 5:
                             unknownFaceStored = True
                             
-
      
                     # Reads through all .png files in the faces folder
                     for pngFile in pngFiles:
                         if name in pngFile and not verifiedFace:
                             # Gets the filename without the extension (.png)
                             name = os.path.splitext(os.path.basename(pngFile))[0]
-                            
-                            # Welcome message that will say the person's name of who is recognized
-                            #engine.say(f"Welcome home {name}")
-                            #engine.runAndWait()
-                            #engine.stop()
                             
                             # Sets the welcomeMessage to true, so that it only does "Welcome home" once
                             verifiedFace = True
@@ -126,8 +120,10 @@ class FaceRecognition:
             if verifiedFace == True:
                 videoCapture.release()
                 cv2.destroyAllWindows()
-                return "Verified"
-
+                # Return the name of the person who was verified
+                return (name, "Verified")
+                
+            # If not motion is detected after 15 seconds, break
             elif time.time() - lastMotionTime > 15:
                 videoCapture.release()
                 cv2.destroyAllWindows()

@@ -2,7 +2,7 @@ import cv2
 import face_recognition
 import os, sys
 import numpy as np
-#import pyttsx3
+import pyttsx3
 import glob
 import time
 import serial
@@ -61,7 +61,7 @@ pngDir = 'faces'
 
 
 # Initialize text-to-speech engine
-# engine = pyttsx3.init()
+engine = pyttsx3.init()
 
 
 # Get list of PNG files in directory
@@ -239,20 +239,19 @@ while True:
             fr = FaceRecognition()
             status = fr.runRecognition()
             # If face is verified move onto fingerprint sensor
-            if status == "Verified":
+            if status and status[1] == "Verified":
                 verifiedFace = True
+                name = status[0]
             # If face is not verified, go back to detecting motion
             elif status == "NoMotionDetected":
                 verifiedFace = False
             
-        #VerifiedPerson = True
 
 
         '''Once face is recognized, break out of the first loop and go through the second loop to verify finger print'''
         tries = 3
         while VerifiedPerson == False and verifiedFace == True:
-			startTime = time.time()
-            timeout = 10
+
             # Turn on LED for fingerprint sensor
             finger.set_led(color=3, mode=1)
             #print("----------------")
@@ -353,11 +352,11 @@ while True:
         print("Door Unlocked")
 
 
-        # Print if you were successful
-        print("Successfully verified!")
-        #engine.say("Successfully verified! Welcome home!")
-        #engine.runAndWait()
-        #engine.stop()
+        # Print if you were successful as well as greet the person who's name was verified
+        print(f"Successfully verified! Welcome home {name}")
+        engine.say(f"Successfully verified! Welcome home {name}!")
+        engine.runAndWait()
+        
         VerifiedPerson = False
         verifiedFace = False
         # Give the person enough time to get into the door before it goes through the magnetic contact switch loop
@@ -373,6 +372,10 @@ while True:
         time.sleep(1)
         myServo.mid() # Turns servo motor 45 degrees to relock door
         time.sleep(2)
+        print("Door has been locked!")
+        engine.say("Door has been locked!")
+        engine.runAndWait()
+        engine.stop()
 
 
     else:
