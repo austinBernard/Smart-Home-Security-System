@@ -8,8 +8,8 @@
 ### ----- Software Development Phase -----
 
 - [x] Facial Recognition 
-- [ ] Biometric fingerprint scanner
-- [ ] Servo motor
+- [x] Biometric fingerprint scanner
+- [x] Servo motor
 - [ ] Keypad
 - [ ] LCD
 - [ ] Magnetic contact switches (Door magnets)
