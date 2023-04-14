@@ -11,7 +11,7 @@
 - [x] Biometric fingerprint scanner
 - [x] Servo motor
 - [ ] Keypad
-- [ ] LCD
+- [x] LCD
 - [ ] Magnetic contact switches (Door magnets)
 - [x] Website/Database (Mostly done but still in the works.)
 - [ ] Speaker
