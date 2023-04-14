@@ -6,6 +6,7 @@ import math
 #import pyttsx3
 import glob
 import time
+import datetime
 
 # Directory containing the PNG files
 pngDir = 'faces'
@@ -20,7 +21,12 @@ pngFiles = glob.glob(os.path.join(pngDir, "*.png"))
 FONT = cv2.FONT_HERSHEY_DUPLEX
 
 folderName = f"images"
-  
+
+# Setup the current time of day
+now = datetime.datetime.now()
+
+# Format the date and time to include in the filename
+dateTime = now.strftime("%m-%d-%Y__%H:%M:%S")
 
 class FaceRecognition:
     # Initialize some variables
@@ -97,13 +103,11 @@ class FaceRecognition:
                     
                     # For the database to store the photo into.
                     if name == "Unknown" and not unknownFaceStored:
+                        filename = os.path.join(folderName, f"{dateTime}.{count}.png")
                         lastMotionTime = time.time()
-                        filename = os.path.join(folderName, f"{name}{count}.png")
-                        
                         cv2.imwrite(filename, frame)
+                        time.sleep(.5)
                         count += 1
-                        if count == 5:
-                            unknownFaceStored = True
                             
      
                     # Reads through all .png files in the faces folder

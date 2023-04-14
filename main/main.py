@@ -246,10 +246,13 @@ while True:
         if not VerifiedPerson and not verifiedFace:
             mylcd.lcd_clear()
             mylcd.lcd_display_string("Recording in ", 1)
-            mylcd.lcd_display_string("process...", 3)
+            mylcd.lcd_display_string("process...", 2)
+            # Run facial recognition program
             fr = FaceRecognition()
-            status = fr.runRecognition()
+            status = fr.runRecognition() # Returns a "Verified" or "NoMotionDetected" status as well as the verified person's name
+            
             mylcd.lcd_clear()
+            
             # If face is verified move onto fingerprint sensor
             if status and status[1] == "Verified":
                 verifiedFace = True
@@ -306,6 +309,7 @@ while True:
                 
             if get_fingerprint():
                 finger.set_led(color=led_color, mode=led_mode)
+                finger.set_led(color = 2, mode = 3)
                 print("Detected #", finger.finger_id, "with confidence", finger.confidence)
                 mylcd.lcd_clear()
                 mylcd.lcd_display_string("Successfully ", 1)
@@ -331,6 +335,7 @@ while True:
                     verifiedFace = False
                     time.sleep(1)
                     mylcd.lcd_clear()
+                    finger.set_led(mode = 4)
                     break
             '''elif c == "d":
                 if finger.delete_model(get_num(finger.library_size)) == adafruit_fingerprint.OK:
@@ -355,16 +360,17 @@ while True:
             else:
                 print("Invalid choice: Try again")'''
 
-            '''# Check if either magnetic contact switch is in contact with the other
-        if GPIO.input(11) == GPIO.HIGH: # Door closed
+        '''# Check if either magnetic contact switch is in contact with the other
+        if GPIO.input(11) == GPIO.LOW: # Door open
             print("Door closed")
             if doorLocked == False:
                 moveServo(0) # Resets servo to original position
                 time.sleep(1)
                 doorLocked = True'''
                 
+    ''' If person is verified, go through the sequence of unlocking and relocking the door '''            
     if VerifiedPerson == True:
-        finger.set_led(color = 2, mode = 3)
+        #finger.set_led(color = 2, mode = 3)
         time.sleep(1)
         finger.set_led(mode = 4)
         # Unlock the door
@@ -389,21 +395,23 @@ while True:
         mylcd.lcd_clear()
         
         # Wait for door to close and magnetic contact switches to touch
-        '''while GPIO.input(11) == GPIO.LOW: # HIGH == Door opened | LOW = Door closed
+        while GPIO.input(11) == GPIO.HIGH: # HIGH == Door opened | LOW = Door closed
             print("Door open")
-            time.sleep(0.1)'''
+            time.sleep(0.1)
 
-        # Relock the door
+        # Relock the door after magnetic contact switches come back into contact
         doorLocked = True
-        time.sleep(1)
+        # Gives time for door to fully shut, before it relocks
+        time.sleep(5) # <-- Increase this time at the end of project to about 15-20 seconds
+        #### Possibly add if statement incase the user reopens the door after shutting it.. ####
         myServo.mid() # Turns servo motor 45 degrees to relock door
         time.sleep(2)
         print("Door has been locked!")
         engine.say("Door has been locked!")
         engine.runAndWait()
         engine.stop()
-        time.sleep(1)
-
+        time.sleep(2)
+        
 
     else:
         print("Motion Not Detected")
