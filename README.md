@@ -1,9 +1,9 @@
 # Smart Home Security System
 ## Senior Projects 2023 Univeristy of Houston - Clear Lake
 ### ----- Project Team -----
-- Austin Bernard - Software
+- Austin Bernard - Software Design
 - Shion Jeegan Michael - Frontend/Database
-- Aaron Haish - Hardware/3D modeling
+- Aaron Haish - Hardware Design/3D modeling
 
 ### ----- Software Development Phase -----
 
