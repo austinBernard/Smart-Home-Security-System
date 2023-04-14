@@ -1,0 +1,7 @@
+opencv-contrib-python
+opencv-python
+cmake
+face_recognition
+pyttsx3
+numpy
+adafruit_fingerprint
