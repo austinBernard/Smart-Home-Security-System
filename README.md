@@ -3,7 +3,7 @@
 ### ----- Project Team -----
 - Austin Bernard - Software
 - Shion Jeegan Michael - Frontend/Database
-- Aaron Haish - Hardware/3D modeling/printing
+- Aaron Haish - Hardware/3D modeling
 
 ### ----- Software Development Phase -----
 
