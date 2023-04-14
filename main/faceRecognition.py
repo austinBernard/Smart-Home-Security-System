@@ -22,11 +22,6 @@ FONT = cv2.FONT_HERSHEY_DUPLEX
 
 folderName = f"images"
 
-# Setup the current time of day
-now = datetime.datetime.now()
-
-# Format the date and time to include in the filename
-dateTime = now.strftime("%m-%d-%Y__%H:%M:%S")
 
 class FaceRecognition:
     # Initialize some variables
@@ -61,12 +56,13 @@ class FaceRecognition:
         verifiedFace = False
         lastMotionTime = time.time()
         unknownFaceStored = False
+        lastSavedTime = time.time()
         
         if not videoCapture.isOpened():
             sys.exit('Webcam not found.')
             
         # Unknown person photo counter
-        count = 0
+        #count = 0
             
         while True:
             ret, frame = videoCapture.read()
@@ -103,11 +99,19 @@ class FaceRecognition:
                     
                     # For the database to store the photo into.
                     if name == "Unknown" and not unknownFaceStored:
-                        filename = os.path.join(folderName, f"{dateTime}.{count}.png")
-                        lastMotionTime = time.time()
-                        cv2.imwrite(filename, frame)
-                        time.sleep(.5)
-                        count += 1
+                        
+                        # Setup the current time of day
+                        now = datetime.datetime.now()
+
+                        # Format the date and time to include in the filename
+                        dateTime = now.strftime("%m-%d-%Y__%H:%M:%S")
+                        currentTime = time.time()
+                        
+                        if currentTime - lastSavedTime >= 1:
+                            filename = os.path.join(folderName, f"{dateTime}.png")
+                            lastMotionTime = currentTime
+                            cv2.imwrite(filename, frame)
+                            lastSavedTime = currentTime
                             
      
                     # Reads through all .png files in the faces folder
