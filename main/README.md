@@ -1,4 +1,11 @@
 # How to Install:
+Export the "requirements.txt" file, then run pip3 or sudo(If you're on linux)
+    
+    pip3 install -r requirements.txt
+    sudo pip3 install -r requirements.txt
+
+If you are not able to install the face_recognition libary, then follow the steps below...
+
 
     pip install CMake
     pip install face_recognition
