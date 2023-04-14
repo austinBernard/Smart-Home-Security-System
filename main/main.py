@@ -10,12 +10,17 @@ import adafruit_fingerprint
 import RPi.GPIO as GPIO
 from gpiozero import Servo
 from faceRecognition import FaceRecognition
+import RPi_I2C_driver
 
 # Passcode to unlock door without facial recognition or finger print verification
 PASSCODE = "1234"
 
 # Owner password to allow user to change password or to input a new user
 OWNER_PASSCODE = "5678"
+
+
+''' Setup i2c LCD'''
+mylcd = RPi_I2C_driver.lcd()
 
 
 ''' Setup magnetic contact switches '''
@@ -25,13 +30,14 @@ GPIO.setup(11, GPIO.IN) # Pin 11
 # GPIO.input(11) == GPIO.HIGH   (switch is OPEN)
 
 
-# ''' Setup motion sensor '''
+''' Setup motion sensor '''
 GPIO.setmode(GPIO.BOARD)
 GPIO.setup(13, GPIO.IN) # Pin 13
 # GPIO.input(13) == GPIO.HIGH (Motion is detected)
 
 
 ''' Setup servo motor '''
+#### MUST RUN "sudo pigpiod" AT EVERY START UP ####
 #servo = Servo(12, pin_factory = factory) # 12 = GPIO12 pin #32
 # Turn the servo motor a full 180 degrees
 myCorrection = 0.45
@@ -78,6 +84,8 @@ folderName = f"images"
 
 ''' Functions for fingerprint scanner '''
 def get_fingerprint():
+    mylcd.lcd_display_string("Please put ", 1)
+    mylcd.lcd_display_string("finger on sensor.", 2)
     """Get a finger print image, template it, and see if it matches!"""
     print("Waiting for image...")
     while finger.get_image() != adafruit_fingerprint.OK:
@@ -236,8 +244,12 @@ while True:
 
         ''' Run through facial recognition class first. Once face is recognized, it will break out and move on to the fingerprint scanner loop '''
         if not VerifiedPerson and not verifiedFace:
+            mylcd.lcd_clear()
+            mylcd.lcd_display_string("Recording in ", 1)
+            mylcd.lcd_display_string("process...", 3)
             fr = FaceRecognition()
             status = fr.runRecognition()
+            mylcd.lcd_clear()
             # If face is verified move onto fingerprint sensor
             if status and status[1] == "Verified":
                 verifiedFace = True
@@ -295,19 +307,30 @@ while True:
             if get_fingerprint():
                 finger.set_led(color=led_color, mode=led_mode)
                 print("Detected #", finger.finger_id, "with confidence", finger.confidence)
+                mylcd.lcd_clear()
+                mylcd.lcd_display_string("Successfully ", 1)
+                mylcd.lcd_display_string("Verified!", 2)
                 VerifiedPerson = True
                 break
                 
             # If finger not found in database, you have 3 tries to verify finger, or the loop will break
             else:
                 print("Finger not found")
+                mylcd.lcd_clear()
+                mylcd.lcd_display_string("Invalid print.. ", 1)
+                mylcd.lcd_display_string(f"Attempts left {tries - 1}", 2)
                 tries -= 1
                 finger.set_led(color = 1, mode = 3)
                 time.sleep(1)
+                mylcd.lcd_clear()
                 print(f"Tries remaining: {tries}")
                 if tries == 0:
+                    mylcd.lcd_display_string("Fingerprint not ", 1)
+                    mylcd.lcd_display_string("verified..", 2)
                     VerifiedPerson = False
                     verifiedFace = False
+                    time.sleep(1)
+                    mylcd.lcd_clear()
                     break
             '''elif c == "d":
                 if finger.delete_model(get_num(finger.library_size)) == adafruit_fingerprint.OK:
@@ -345,15 +368,16 @@ while True:
         time.sleep(1)
         finger.set_led(mode = 4)
         # Unlock the door
-        time.sleep(1)
         myServo.max() # Turns servo 45 degrees to unlock door
         doorLocked = False
         time.sleep(2)
         print("Door Unlocked")
-
+        mylcd.lcd_clear()
 
         # Print if you were successful as well as greet the person who's name was verified
         print(f"Successfully verified! Welcome home {name}")
+        mylcd.lcd_display_string("Welcome home", 1)
+        mylcd.lcd_display_string(f"{name}!", 2)
         engine.say(f"Successfully verified! Welcome home {name}!")
         engine.runAndWait()
         
@@ -361,6 +385,8 @@ while True:
         verifiedFace = False
         # Give the person enough time to get into the door before it goes through the magnetic contact switch loop
         time.sleep(5) # <-- Increase this time at the end of project to about 15-20 seconds
+        
+        mylcd.lcd_clear()
         
         # Wait for door to close and magnetic contact switches to touch
         '''while GPIO.input(11) == GPIO.LOW: # HIGH == Door opened | LOW = Door closed
@@ -376,6 +402,7 @@ while True:
         engine.say("Door has been locked!")
         engine.runAndWait()
         engine.stop()
+        time.sleep(1)
 
 
     else:
