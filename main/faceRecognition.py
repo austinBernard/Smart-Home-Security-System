@@ -3,16 +3,13 @@ import face_recognition
 import os, sys
 import numpy as np
 import math
-#import pyttsx3
 import glob
 import time
 import datetime
+import RPi.GPIO as GPIO
 
 # Directory containing the PNG files
 pngDir = 'faces'
-
-# Initialize text-to-speech engine
-#engine = pyttsx3.init()
 
 # Get list of PNG files in directory
 pngFiles = glob.glob(os.path.join(pngDir, "*.png"))
@@ -22,6 +19,9 @@ FONT = cv2.FONT_HERSHEY_DUPLEX
 
 folderName = f"images"
 
+# Setup magnetic contact switches
+GPIO.setmode(GPIO.BOARD)
+GPIO.setup(11, GPIO.IN) # Pin 11
 
 class FaceRecognition:
     # Initialize some variables
@@ -136,9 +136,11 @@ class FaceRecognition:
                 videoCapture.release()
                 cv2.destroyAllWindows()
                 return "NoMotionDetected"
-
-                    
-                    
+            
+            # If door is opened during facial recognition verification, break, sound alarm
+            elif GPIO.input(11) == GPIO.HIGH:
+                return "AlarmActivated"
+                         
                     
             self.processCurrentFrame = not self.processCurrentFrame
             
