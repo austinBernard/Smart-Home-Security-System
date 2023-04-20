@@ -21,7 +21,7 @@
 ### ----- Features ----- 
 
 
-	• Biomatric Scanner: Replacing the facial recognition with a biometric finger scanner. This will allow the person to unlock the door if your finger has been verified.
+	• Biomatric Fingerprint Scanner: for person identification in the double verification process.
 	
 	• Camera: Once motion is detected camera comes on and will either take a photo/video and will email that picture to the owner, as well as storing the picture/video into a database with the date and time of occurence. The camera will also act as a facial recognition to allow double verification along with the biometric scanner.
 	
@@ -29,12 +29,15 @@
 	
 	• Keypad: to allow entry incase face isn't recongnized.
 	
-	• Door sensor magnets: to tell if door is closed or has been opened.
-
-
-	• Speaker: for text to speech
+	• High torque servo motor that will unlock a door upon successful verification.
 	
-	• Buzzer: for alarm incase of forced entry
+	• Motion sensor to detect movement which will start the verification process.
+
+	• Alarm system with magnetic contact switches to sound an alarm in case of intrusion.
+	
+	• Unknown faces will be stored in a database, with the date and time, which can be viewed online at any time by the owner and select users.
+	
+	• 3D printed design for the components on the front of the door, a 3D printed design for the servo motor, as well as a 3D printed box for the back of the door which will contain the Raspberry Pi.
 
 	• Website: to display all of the data with an admin panel.
 
