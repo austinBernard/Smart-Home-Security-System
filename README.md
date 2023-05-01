@@ -13,7 +13,7 @@
 - [ ] Keypad
 - [x] LCD
 - [x] Magnetic contact switches (Door magnets)
-- [x] Website/Database (Mostly done but still in the works.)
+- [x] Website/Database
 - [ ] Speaker
 - [ ] Alarm
 - [ ] 3D Prints
