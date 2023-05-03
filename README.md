@@ -12,7 +12,7 @@
 - [x] Servo motor
 - [ ] Keypad
 - [x] LCD
-- [x] Magnetic contact switches (Door magnets)
+- [x] Magnetic contact switches (Reed switch)
 - [x] Website/Database
 - [ ] Speaker
 - [ ] Alarm
