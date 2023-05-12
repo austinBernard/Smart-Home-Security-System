@@ -10,11 +10,11 @@
 - [x] Facial Recognition 
 - [x] Biometric fingerprint scanner
 - [x] Servo motor
-- [ ] Keypad
+- [x] Keypad
 - [x] LCD
 - [x] Magnetic contact switches (Reed switch)
 - [x] Website/Database
-- [ ] Speaker
+- [x] Speaker
 - [ ] Alarm
 - [ ] 3D Prints
 
