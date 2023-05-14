@@ -3,13 +3,28 @@ import face_recognition
 import os, sys
 import numpy as np
 import math
+#import pyttsx3
 import glob
 import time
 import datetime
 import RPi.GPIO as GPIO
+import boto3
+import mysql.connector
+from mysql.connector import Error
+import pymysql
+import base64
 
-# Directory containing the PNG files
+
+''' Setup button '''
+GPIO.setmode(GPIO.BOARD)
+GPIO.setup(36, GPIO.IN, pull_up_down=GPIO.PUD_UP) # pin #36 GPIO 16
+
+
+ #Directory containing the PNG files
 pngDir = 'faces'
+
+# Initialize text-to-speech engine
+#engine = pyttsx3.init()
 
 # Get list of PNG files in directory
 pngFiles = glob.glob(os.path.join(pngDir, "*.png"))
@@ -17,11 +32,32 @@ pngFiles = glob.glob(os.path.join(pngDir, "*.png"))
 # Font used for all OpenCV fonts
 FONT = cv2.FONT_HERSHEY_DUPLEX
 
-folderName = f"images"
+folderName=f"images"
 
-# Setup magnetic contact switches
+''' Setup Keypad '''
+# Define the pins for the keypad rows and columns
 GPIO.setmode(GPIO.BOARD)
-GPIO.setup(11, GPIO.IN) # Pin 11
+ROWS = [33, 31, 29, 40] # [R1, R2, R3, R4]
+COLS = [16, 18, 15, 19] # [C1, C2, C3, C4]
+GPIO.setwarnings(False)
+
+# Define the keypad matrix
+KEYS = [
+    ['1', '2', '3', 'A'],
+    ['4', '5', '6', 'B'],
+    ['7', '8', '9', 'C'],
+    ['*', '0', '#', 'D']
+]
+
+# Set up the row pins as outputs and the column pins as inputs
+for i in range(4):
+    GPIO.setup(ROWS[i], GPIO.OUT)
+    GPIO.output(ROWS[i], GPIO.HIGH)
+
+# Initialize column pins to input with pull-up resistors
+for j in range(4):
+    GPIO.setup(COLS[j], GPIO.IN, pull_up_down=GPIO.PUD_UP)
+        
 
 class FaceRecognition:
     # Initialize some variables
@@ -54,6 +90,7 @@ class FaceRecognition:
         videoCapture = cv2.VideoCapture(0)
         
         verifiedFace = False
+        unverifiedFace = False
         lastMotionTime = time.time()
         unknownFaceStored = False
         lastSavedTime = time.time()
@@ -65,6 +102,7 @@ class FaceRecognition:
         #count = 0
             
         while True:
+            
             ret, frame = videoCapture.read()
             
             # Only process every other frame of video to save time
@@ -107,11 +145,16 @@ class FaceRecognition:
                         dateTime = now.strftime("%m-%d-%Y__%H:%M:%S")
                         currentTime = time.time()
                         
-                        if currentTime - lastSavedTime >= 1:
-                            filename = os.path.join(folderName, f"{dateTime}.png")
+                        if currentTime - lastSavedTime >= 3:
                             lastMotionTime = currentTime
-                            cv2.imwrite(filename, frame)
                             lastSavedTime = currentTime
+                            _, encoded_image = cv2.imencode('.png', frame)
+                            image_data = encoded_image.tobytes()
+                            encoded_image_data = base64.b64encode(image_data)
+                            #upload_image_to_database(encoded_image_data, now.strftime("%Y-%m-%d"), now.strftime("%H:%M:%S"))
+                            
+                            #unverifiedFace = True # If face is unknown, set the flag to True
+                            
                             
      
                     # Reads through all .png files in the faces folder
@@ -120,7 +163,7 @@ class FaceRecognition:
                             # Gets the filename without the extension (.png)
                             name = os.path.splitext(os.path.basename(pngFile))[0]
                             
-                            # Sets the welcomeMessage to true, so that it only does "Welcome home" once
+                            # Sets the verifiedFace to true, so that it only does "Welcome home" once
                             verifiedFace = True
                                 
 
@@ -137,10 +180,19 @@ class FaceRecognition:
                 cv2.destroyAllWindows()
                 return "NoMotionDetected"
             
-            # If door is opened during facial recognition verification, break, sound alarm
-            elif GPIO.input(11) == GPIO.HIGH:
-                return "AlarmActivated"
-                         
+            # When an unverified face is detected, take photo, and break while loop
+            elif unverifiedFace == True:
+                videoCapture.release()
+                cv2.destroyAllWindows()
+                return "unverified"
+            
+            # If button is pressed, break out of facial recognition
+            elif GPIO.input(36) == False:
+                videoCapture.release()
+                cv2.destroyAllWindows()
+                return "EnterPasscode"
+                    
+                    
                     
             self.processCurrentFrame = not self.processCurrentFrame
             
@@ -165,6 +217,7 @@ class FaceRecognition:
             # 'q' on keyboard exited the screen
             if cv2.waitKey(1) == ord('q'):
                 break
+            
             
         # Release the video capture and close OpenCV window
         videoCapture.release()
