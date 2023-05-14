@@ -10,7 +10,7 @@
 - [x] Facial Recognition 
 - [x] Biometric fingerprint scanner
 - [x] Servo motor
-- [x] Keypad
+- [x] Keypad (Keypad scrambler with 20x4 LCD)
 - [x] LCD
 - [x] Magnetic contact switches (Reed switch)
 - [x] Website/Database
