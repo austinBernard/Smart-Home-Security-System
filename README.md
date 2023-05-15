@@ -27,7 +27,7 @@
 	
 	• Door lock: If no finger is verified, be able to use a keypad to still allow entry through the lock.
 	
-	• Keypad: to allow entry incase face isn't recongnized.
+	• Keypad: to allow entry incase face isn't recongnized as well as adding new users to the system.
 	
 	• High torque servo motor that will unlock a door upon successful verification.
 	
