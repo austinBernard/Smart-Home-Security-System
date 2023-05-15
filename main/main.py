@@ -65,7 +65,6 @@ minPW = (1.0 - myCorrection) / 1000
 myServo = Servo(12, min_pulse_width = minPW, max_pulse_width = maxPW)
 
 
-
 '''while True:
     mylcd.lcd_clear()
     mylcd.lcd_display_string('{},{},{},{}'.format(scrambled_keys[(0, 0)], scrambled_keys[(0, 1)], scrambled_keys[(0, 2)], scrambled_keys[(0, 3)]), 1)
@@ -110,8 +109,6 @@ FONT = cv2.FONT_HERSHEY_DUPLEX
 
 # ...Folder path to use at a later date...   "face_recognition/images"
 folderName = f"images"
-
-
 
 
 ''' Setup Keypad '''
@@ -159,7 +156,6 @@ def enter_password():
     mylcd.lcd_display_string(' {}   {}   {}  to quit'.format(scrambled_keys[(1, 0)], scrambled_keys[(1, 1)], scrambled_keys[(1, 2)]), 2)
     mylcd.lcd_display_string(' {}   {}   {} '.format(scrambled_keys[(2, 0)], scrambled_keys[(2, 1)], scrambled_keys[(2, 2)]), 3)
     mylcd.lcd_display_string(f"     {scrambled_keys[(3, 1)]}     Pass:{entered_password}", 4)
-
 
 
     while len(entered_password) < len(PASSWORD) and continuePass:
