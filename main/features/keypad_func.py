@@ -11,9 +11,9 @@ from faceRecognition import FaceRecognition
 import RPi_I2C_driver
 import random
 import subprocess
+from password_manager import PASSWORD
 
 # Passcode to unlock door without facial recognition or finger print verification
-PASSWORD = "1234"
 previous_timestamp = 0
 
 # Owner password to allow user to change password or to input a new user

@@ -14,16 +14,16 @@ import RPi_I2C_driver
 import random
 import subprocess
 import pygame
-from password_manager import load_password_from_file, update_password_if_changed
+from password_manager import load_password_from_file, update_password_if_changed, PASSWORD
 from features.trigger_alarm import trigger_alarm
 from features.keypad_func import enter_password, check_password, enter_new_password, save_password_to_file, load_password_from_file
+from features.restart_main_script import restart_main_script
 
 # Run pigpiod at the start of program
 system("sudo pigpiod")
 
 
 # Passcode to unlock door without facial recognition or finger print verification
-PASSWORD = "1234"
 previous_timestamp = 0
 
 # Owner password to allow user to change password or to input a new user
@@ -36,6 +36,9 @@ mylcd = RPi_I2C_driver.lcd()
 
 ''' Setup button '''
 GPIO.setup(36, GPIO.IN, pull_up_down=GPIO.PUD_UP) # pin #36 GPIO 16
+
+''' SETUP NEW BUTTON TO BE ABLE TO RESTART main.py FOR WHENEVER NEW FACES ARE ADDED TO DATASET 'faces'
+GPIO.add_event_detect(PIN_#, GPIO.FALLING, callback=restart_main_script, bouncetime=2000) '''
 
 
 ''' Setup GREEN and RED LED '''
@@ -72,16 +75,8 @@ myServo = Servo(12, min_pulse_width = minPW, max_pulse_width = maxPW)
 
 
 ''' Setting up fingerprint sensor '''
-# uart = busio.UART(board.TX, board.RX, baudrate=57600)
-
-# If using with a computer such as Linux/RaspberryPi, Mac, Windows with USB/serial converter:
-# # uart = serial.Serial("/dev/ttyUSB0", baudrate=57600, timeout=1)
-
 # If using with Linux/Raspberry Pi and hardware UART:
 uart = serial.Serial("/dev/serial0", baudrate=57600, timeout=1)
-
-# If using with Linux/Raspberry Pi 3 with pi3-disable-bt
-# uart = serial.Serial("/dev/ttyAMA0", baudrate=57600, timeout=1)
 
 finger = adafruit_fingerprint.Adafruit_Fingerprint(uart)
 
@@ -107,13 +102,12 @@ FONT = cv2.FONT_HERSHEY_DUPLEX
 folderName = f"images"
 
 
-
 stored_password = load_password_from_file()
 if stored_password is not None:
     PASSWORD = stored_password
     
 
-''' Functions for fingerprint scanner '''
+''' Function for fingerprint sensor '''
 def get_fingerprint():
     mylcd.lcd_display_string("Please put finger", 2)
     mylcd.lcd_display_string("on sensor.", 3)
@@ -148,8 +142,10 @@ while True:
     
     PASSWORD, previous_timestamp = update_password_if_changed(PASSWORD, previous_timestamp)
     
+    
     if GPIO.input(11) == GPIO.LOW and not VerifiedPerson:
-            trigger_alarm(5)
+            # Change this value to higher for final product
+            trigger_alarm(15, 10)
     
     if GPIO.input(13) == GPIO.HIGH and doorLocked == True: # Motion is detected
         print("Motion Detected")
@@ -160,6 +156,7 @@ while True:
             mylcd.lcd_display_string("  Motion Detected",1)
             mylcd.lcd_display_string("   Recording in", 3)
             mylcd.lcd_display_string("    process...", 4)
+            
             # Run facial recognition program
             fr = FaceRecognition()
             status = fr.runRecognition() # Returns a "Verified" or "NoMotionDetected" status as well as the verified person's name
