@@ -15,7 +15,7 @@
 - [x] Magnetic contact switches (Reed switch)
 - [x] Website/Database
 - [x] Speaker
-- [ ] Alarm
+- [x] Alarm
 - [ ] 3D Prints
 
 ### ----- Features ----- 
