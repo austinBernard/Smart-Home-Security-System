@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-flask-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: my-flask-app
+  template:
+    metadata:
+      labels:
+        app: my-flask-app
+    spec:
+      containers:
+        - name: my-flask-app
+          image: us.gcr.io/dataapimoon/my-flask-app:latest
+          ports:
+            - containerPort: 8080
+          env:
+            - name: GOOGLE_APPLICATION_CREDENTIALS
+              value: dataapimoon-0e8296b59e2b.json
+            - name: BUCKET_NAME
+              value: shss-faces
+          resources:
+            limits:
+              memory: "512Mi"   # Set a memory limit (e.g., 512 MiB)
+              cpu: "0.5"        # Set a CPU limit (e.g., 0.5 CPU cores)
