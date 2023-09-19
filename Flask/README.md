@@ -12,7 +12,7 @@ gcloud components install gke-gcloud-auth-plugin
 
 
 # Deploying to GKE cluster
-gcloud container clusters get-credentials shss-cluster --zone us-central1-a
+gcloud container clusters get-credentials shss-cluster --zone us-south1-a
 kubectl apply -f deployment.yaml
 kubectl apply -f service.yaml
 

@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: my-flask-app
-          image: us.gcr.io/dataapimoon/my-flask-app:latest
+          image: us.gcr.io/dataapimoon/my-flask-app:1.0
           ports:
             - containerPort: 8080
           env:

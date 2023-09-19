@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>List Images</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="header">
+        <h1>List Images</h1>
+    </div>
+    <div class="image-lists">
+        {% for date in sorted_dates %}
+            <h2>{{ date }}</h2>
+            <ul>
+                {% for filename in image_groups[date] %}
+                    <li>
+                        <div class="image-container">
+                            <img class="thumbnail" src="/images/{{ filename }}" alt="{{ filename }}" width="300">
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% endfor %}
+    </div>
+
+<script>
+    // JavaScript to handle click-to-enlarge functionality
+    const thumbnails = document.querySelectorAll('.thumbnail');
+    const enlargeImages = document.querySelectorAll('.enlarge-image');
+
+    thumbnails.forEach((thumbnail, index) => {
+        thumbnail.addEventListener('click', () => {
+            enlargeImages[index].classList.add('active');
+        });
+
+        // Close the enlarged image when clicked
+        enlargeImages[index].addEventListener('click', () => {
+            enlargeImages[index].classList.remove('active');
+        });
+    });
+
+    // Set a maximum width and height for enlarged images
+    const maxEnlargedImageWidth = 800; // Set your desired maximum width
+    const maxEnlargedImageHeight = 600; // Set your desired maximum height
+
+    enlargeImages.forEach((image) => {
+        image.addEventListener('load', () => {
+            if (image.width > maxEnlargedImageWidth || image.height > maxEnlargedImageHeight) {
+                // Calculate the new dimensions while preserving the aspect ratio
+                const aspectRatio = image.width / image.height;
+                let newWidth = maxEnlargedImageWidth;
+                let newHeight = maxEnlargedImageWidth / aspectRatio;
+
+                // If the calculated height exceeds the maximum height, use the maximum height instead
+                if (newHeight > maxEnlargedImageHeight) {
+                    newHeight = maxEnlargedImageHeight;
+                    newWidth = maxEnlargedImageHeight * aspectRatio;
+                }
+
+                // Apply the new dimensions
+                image.style.width = `${newWidth}px`;
+                image.style.height = `${newHeight}px`;
+            }
+        });
+    });
+</script>
+
+</body>
+</html>

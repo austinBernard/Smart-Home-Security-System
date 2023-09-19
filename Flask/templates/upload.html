@@ -2,12 +2,15 @@
 <html>
 <head>
     <title>Upload Image</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
-    <h1>Upload an Image</h1>
-    <form method="POST" enctype="multipart/form-data">
-        <input type="file" name="file">
-        <input type="submit" value="Upload">
+<div class="header">
+    <h1>Upload Image</h1>
+    <form action="/" method="POST" enctype="multipart/form-data">
+        <input type="file" name="file" accept=".jpg, .png, .jpeg">
+        <input type="submit" value="Upload Image">
     </form>
+</div>
 </body>
 </html>
