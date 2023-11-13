@@ -5,7 +5,7 @@
 - Shion Jeegan Michael - Frontend/Database
 - Aaron Haish - Hardware Design/3D modeling
 
-### ----- Software Development Phase -----
+### ----- Finished! -----
 
 - [x] Facial Recognition 
 - [x] Biometric fingerprint scanner
@@ -16,7 +16,7 @@
 - [x] Website/Database
 - [x] Speaker
 - [x] Alarm
-- [ ] 3D Prints
+- [x] 3D Prints
 
 ### ----- Features ----- 
 
