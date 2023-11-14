@@ -3,7 +3,6 @@ import time
 from datetime import datetime 
 from features.alert_sender import send_email
 
-''' ADD IN THE OPTION TO ADD THE TIME/DATE TO THE ALERT NOTIFICATION '''
 # Init pygame for alarm sound
 pygame.mixer.init()
 ALARM_SOUND_PATH = "psycho-sound-11797.mp3"
@@ -25,8 +24,8 @@ def trigger_alarm(duration, alert_message_duration):
         # Send emails
         email_subject = 'Security Alert: UNAUTHORIZED PERSON'
         email_message = f'Alarm triggered at {current_datetime}'
-        send_email(email_subject, email_message, '')
-        send_email(email_subject, email_message, '')
+        send_email(email_subject, email_message, '8323151016@txt.att.net') # Insert in phone number as 1234567890@txt.att.net if you have at&t as your phone provider
+        send_email(email_subject, email_message, 'seniorprojects37@gmail.com') # The email in which you want the alerts sent to
 
         # Update the last alert time
         last_alert_time = current_time

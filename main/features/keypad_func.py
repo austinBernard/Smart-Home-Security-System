@@ -70,11 +70,13 @@ def enroll_finger(location):
             mylcd.lcd_clear()
             mylcd.lcd_display_string("Place finger on ", 2)
             mylcd.lcd_display_string("sensor ", 3)
+            mylcd.lcd_display_string("then remove", 4)
         else:
             print("Place same finger again...", end="")
             mylcd.lcd_clear()
             mylcd.lcd_display_string("Place same finger ", 2)
             mylcd.lcd_display_string("again...", 3)
+            mylcd.lcd_display_string("then remove", 4)
 
         while True:
             i = finger.get_image()
@@ -165,12 +167,18 @@ def enroll_finger(location):
             mylcd.lcd_display_string("Prints did not match", 2)
             time.sleep(1)
             mylcd.lcd_clear()
+            mylcd.lcd_display_string("Press '*' to quit", 1)
+            mylcd.lcd_display_string("Or press 'A' to go", 3)
+            mylcd.lcd_display_string("to owner settings.", 4)
         else:
             print("Other error")
             mylcd.lcd_clear()
             mylcd.lcd_display_string("Other error", 2)
             time.sleep(1)
             mylcd.lcd_clear()
+            mylcd.lcd_display_string("Press '*' to quit", 1)
+            mylcd.lcd_display_string("Or press 'A' to go", 3)
+            mylcd.lcd_display_string("to owner settings.", 4)
         return False
 
     print("Storing model #%d..." % location, end="")
@@ -297,7 +305,6 @@ def get_num(max_number):
             pass
     return i
 
-
 ''' Setup Keypad '''
 # Define the pins for the keypad rows and columns
 ROWS = [33, 31, 29, 40] # [R1, R2, R3, R4]
@@ -385,10 +392,10 @@ def enter_password():
                             mylcd.lcd_display_string("Select an option", 2)
                             time.sleep(1)
                             mylcd.lcd_clear()
-                            mylcd.lcd_display_string("A) enroll print", 1)
-                            mylcd.lcd_display_string("B) delete print", 2)
+                            mylcd.lcd_display_string("A) Enroll print", 1)
+                            mylcd.lcd_display_string("B) Delete print", 2)
                             mylcd.lcd_display_string("C) Change Pass", 3)
-                            mylcd.lcd_display_string("#) quit", 4)
+                            mylcd.lcd_display_string("#) Quit", 4)
 
                             print("Select an option\n")
                             print("A) enroll print")
@@ -426,13 +433,26 @@ def enter_password():
                                 PASSWORD = new_password
                                 save_password_to_file(new_password)
                                 mylcd.lcd_clear()
-                                mylcd.lcd_display_string("Password changed!", 2)
-                                mylcd.lcd_display_string("Press '*' to quit", 3)
+                                mylcd.lcd_display_string("Press '*' to quit", 1)
+                                mylcd.lcd_display_string("Or press 'A' to go", 3)
+                                mylcd.lcd_display_string("to owner settings.", 4)
                                 time.sleep(1)
                                 break
 
                             elif option_selected == "B":
+                                fingerprint_ids = finger.templates  # Read the templates
+                                if fingerprint_ids:
+                                    for template_id in fingerprint_ids:
+                                        mylcd.lcd_clear()
+                                        mylcd.lcd_display_string(f"ID: {template_id}", 2)
+                                        time.sleep(2)
+                                else:
+                                    mylcd.lcd_clear()
+                                    mylcd.lcd_display_string("No fingerprints found", 2)
+                                    time.sleep(2)
                                 if finger.delete_model(get_num(finger.library_size)) == adafruit_fingerprint.OK:
+                                    print(finger.template_count)
+                                    print(finger.templates)
                                     print("Deleted!")
                                     mylcd.lcd_clear()
                                     mylcd.lcd_display_string("Deleted Template!", 2)

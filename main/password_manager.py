@@ -7,6 +7,8 @@ def load_password_from_file():
     except FileNotFoundError:
         return None
 
+PASSWORD = load_password_from_file()
+
 def update_password_if_changed(PASSWORD, previous_timestamp):
     current_timestamp = os.path.getmtime("password.txt")
     if current_timestamp > previous_timestamp:

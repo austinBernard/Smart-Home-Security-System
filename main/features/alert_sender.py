@@ -8,9 +8,9 @@ def send_email(subject, body, to_email):
     msg['subject'] = subject
     msg['to'] = to_email
     
-    user = ""
+    user = "seniorprojects37@gmail.com"
     msg['from'] = user
-    password = ""
+    password = "ywuzwptxjodicosq"
     
     server = smtplib.SMTP("smtp.gmail.com", 587)
     server.starttls()
